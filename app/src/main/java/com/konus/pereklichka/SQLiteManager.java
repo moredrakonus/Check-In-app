@@ -133,7 +133,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public void addGroupToDB(GroupModel groupModel){
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("group_name", groupModel.getgroup_name_txt() + "_group");
+        contentValues.put("group_name", groupModel.getgroup_name_txt());
         contentValues.put("members_amount", groupModel.getmemberAmountTxt());
         sqLiteDatabase.insert("groups_table", null, contentValues);
     }

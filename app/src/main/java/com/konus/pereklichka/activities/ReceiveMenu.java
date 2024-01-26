@@ -61,7 +61,7 @@ public class ReceiveMenu extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).setTitle("   "+group_name);
 
-        this.sqLiteManager = SQLiteManager.instanceOfDatabase(this, group_name+"_group");
+        this.sqLiteManager = SQLiteManager.instanceOfDatabase(this, group_name);
         this.sqLiteManager.addNewTable();
 
         RecyclerView recyclerView = findViewById(R.id.gRecyclerView);
@@ -251,7 +251,7 @@ public class ReceiveMenu extends AppCompatActivity {
                             runOnUiThread(() -> {
                             adapter.notifyItemChanged(finalMembers1.indexOf(model));});
                         }else {
-                            System.err.println("User "+ model.getTxtName() + " " + model.getTxtLName() + " is already in the list and new users are not allowed!");
+                            System.err.println("User "+ model.getTxtName() + " " + model.getTxtLName() + " is not in the list and new users are not allowed!");
                         }
                     }}
                     else {

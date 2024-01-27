@@ -211,7 +211,7 @@ public class ReceiveMenu extends AppCompatActivity {
                             runOnUiThread(() -> {
                             adapter.notifyItemChanged(finalMembers.indexOf(model));});
                             System.out.println("User " + model.getTxtName() + " " + model.getTxtLName() + " found and added from and updated in DB!");
-
+                            break;
                         }else {
                             sqLiteManager.addUserToDB(model2);
                             MemberModel.add(model2);
@@ -250,12 +250,14 @@ public class ReceiveMenu extends AppCompatActivity {
                             ArrayList<com.konus.pereklichka.rv_models.MemberModel> finalMembers1 = members;
                             runOnUiThread(() -> {
                             adapter.notifyItemChanged(finalMembers1.indexOf(model));});
+                            break;
                         }else {
                             System.err.println("User "+ model.getTxtName() + " " + model.getTxtLName() + " is not in the list and new users are not allowed!");
                         }
                     }}
                     else {
                         System.out.println("Error: DB is empty while new users are not allowed!");
+                        stopListening();
                     }
                 }
             }

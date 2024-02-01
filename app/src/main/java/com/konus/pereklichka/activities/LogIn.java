@@ -81,7 +81,7 @@ public class LogIn extends AppCompatActivity {
         }
         else if (edtTextLName.getText().toString().equals("")) {
             txtWarnLName.setVisibility(View.VISIBLE);
-            txtWarnName.setText("Введіть своє прізвище!");
+            txtWarnLName.setText("Введіть своє прізвище!");
             return false;
         }
         else if (isThere(edtTextName.getText().toString().toCharArray(), '@')){

@@ -22,10 +22,8 @@ import com.konus.pereklichka.rv_models.GroupModel;
 import com.konus.pereklichka.GroupsInterface;
 import com.konus.pereklichka.PopupDialog;
 import com.konus.pereklichka.R;
-import com.konus.pereklichka.rv_models.MemberModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -95,7 +93,7 @@ public class GropsList extends AppCompatActivity implements GroupsInterface {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.addGoupMi){
+        if (id == R.id.exportMI){
             popupDialog.showPopup(this, new PopupDialog.PopupListener() {
                 @Override
                 public void onTextEntered(String text) {

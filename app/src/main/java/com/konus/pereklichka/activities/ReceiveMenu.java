@@ -116,8 +116,22 @@ public class ReceiveMenu extends AppCompatActivity {
         if (id == R.id.delete_group){
             PopUp();
         }
+        else if (id == R.id.export_group) {
+            ArrayList<MemberModel> members = new ArrayList<>();
+            try{
+                members = sqLiteManager.loadMembersFromDB();
+            }
+            catch (Exception e){
+                System.err.println(e);
+            }
+            if (members != null){
+                if (members.size() != 0){
+                    sqLiteManager.exportToExcel(this);}}
+        }
         return true;
     }
+
+
 
 
     private void PopUp() {
@@ -409,7 +423,6 @@ public class ReceiveMenu extends AppCompatActivity {
 
         multicastLock.release();
 
-        // Get the router IP address
         int ipAddress = dhcpInfo.gateway;
         return formatIPAddress(ipAddress);
     }

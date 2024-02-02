@@ -5,13 +5,25 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import com.konus.pereklichka.rv_models.GroupModel;
 import com.konus.pereklichka.rv_models.MemberModel;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+
+import androidx.core.content.FileProvider;
+
+import org.apache.poi.ss.usermodel.Row;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class SQLiteManager extends SQLiteOpenHelper {
     private static SQLiteManager sqLiteManager;
@@ -169,5 +181,83 @@ public class SQLiteManager extends SQLiteOpenHelper {
         sqLiteDatabase.update("groups_table", contentValues, "group_name=?", new String[]{groupname});
 
 
+    }
+
+    public void exportToExcel(Context context) {
+        ArrayList<MemberModel> MemberModels = loadMembersFromDB();
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        org.apache.poi.ss.usermodel.Sheet sheet = workbook.createSheet("Sheet1");
+
+
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("ID");
+        headerRow.createCell(1).setCellValue("Ім'я");
+        headerRow.createCell(2).setCellValue("Прізвище");
+        headerRow.createCell(3).setCellValue("Присутність");
+        headerRow.createCell(4).setCellValue("");
+        headerRow.createCell(5).setCellValue("Дата:");
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
+        String formattedDate = sdf.format(date);
+        String formattedTime = sdf2.format(date);
+        headerRow.createCell(6).setCellValue(formattedDate);
+        headerRow.createCell(7).setCellValue("Час:");
+        headerRow.createCell(8).setCellValue(formattedTime);
+
+
+        int rowNum = 1;
+        for (MemberModel data : MemberModels) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(data.getSpecial_id());
+            row.createCell(1).setCellValue(data.getTxtName());
+            row.createCell(2).setCellValue(data.getTxtLName());
+            if (data.getImage()){
+            row.createCell(3).setCellValue("Присутній");}
+            else {
+                row.createCell(3).setCellValue("Відсутній");
+            }
+
+        }
+
+
+        File file = saveWorkbookToTempFile(context, workbook);
+        assert file != null;
+        Uri fileUri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_STREAM, fileUri);
+        intent.setType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        context.startActivity(Intent.createChooser(intent, "Export to Excel"));
+    }
+
+    private File saveWorkbookToTempFile(Context context, XSSFWorkbook workbook) {
+        try {
+            // Create a temporary file in external storage
+            File dir = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "ExcelExports");
+            if (!dir.exists() && !dir.mkdirs()) {
+                throw new IOException("Could not create directories");
+            }
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd_MM_yyyy");
+            String formattedDate = sdf.format(date);
+            File file = new File(dir, TABLE_NAME + "_"+formattedDate+".xlsx");
+
+            if (!file.exists() && !file.createNewFile()) {
+                throw new IOException("Could not create file");
+            }
+
+            // Write the workbook content to the file
+            FileOutputStream fos = new FileOutputStream(file);
+            workbook.write(fos);
+            fos.close();
+
+            return file;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

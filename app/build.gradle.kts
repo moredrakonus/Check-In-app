@@ -43,6 +43,8 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation ("org.apache.commons:commons-lang3:3.12.0")
+    implementation ("org.apache.poi:poi:5.1.0")
+    implementation ("org.apache.poi:poi-ooxml:5.1.0")
 
 
 }

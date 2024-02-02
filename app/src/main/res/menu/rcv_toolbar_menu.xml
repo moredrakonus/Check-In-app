@@ -2,9 +2,17 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+    <item
+        android:id="@+id/export_group"
+        android:icon="@drawable/ic_share_foreground"
+        android:title="Експортувати до Excel"
+        app:showAsAction="always" />
     <item
         android:id="@+id/delete_group"
         android:icon="@drawable/ic_delete_foreground"
         android:title="DelGr"
         app:showAsAction="always" />
+
+
 </menu>
